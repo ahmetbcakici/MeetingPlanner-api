@@ -8,16 +8,11 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(bodyParser.json());
-app.use('./api', api);
+app.use('/api', api);
 
 app.get('/', (req, res) => {
-	res.send('test');
-});
-
-app.post('/', (req, res) => {
-	console.log('post');
-	console.log(req.body);
-	res.send('from-the-server');
+	console.log("test")
+	res.end("test");
 });
 
 app.listen(PORT, () => {
