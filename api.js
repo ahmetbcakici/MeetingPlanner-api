@@ -9,22 +9,39 @@ mongoose.connect(process.env.DB_URI, err => {
 	console.log('MongoDB connection is successful via Mongoose!');
 });
 
-router.get('/', async (req, res) => {
-	const { itemID } = req.query;
-	// const x = await FreeOne.find({ _id: itemID });
-	// console.log(x);
-	// const doc = await FreeOne.findById(itemID);
+router.get('/freeone', async (req, res) => {
+	/*
+
+	const { itemID } = req.query; 
+	// itemID = 5e73a
+	// _id = 5e73a72ec9abd72648aaa6c2
 	const doc = await FreeOne.findOne({ _id: itemID }).catch(err => {
 		// if (err.message instanceof mongoose.Error.CastError) httpResponse.success(res, 'Data was not found', null);
 		//dont do anything
 	});
+	console.log(itemID)
 	if (!doc) console.log('doc bos');
-	console.log(doc);
+	res.send(doc);
 
-	res.send('indx');
+	*/
+
+	const { itemID } = req.query;
+	// itemID = 5e73a
+	// _id = 5e73a72ec9abd72648aaa6c2
+	const docs = await FreeOne.find({});
+	docs.map(item => {
+		const clientItemID = JSON.stringify(item._id).substr(1, 5);
+		if (clientItemID === itemID){
+			console.log("bulundu")
+			res.send(item);
+			return;
+		}
+		// console.log("map son");
+	});
+	// console.log("bitti")
 });
 
-router.post('/', (req, res) => {
+router.post('/freeone', (req, res) => {
 	const { pollTitle, additionalDescriptions, userName, emailAddress, possibleDates } = req.body;
 
 	FreeOne.create(
@@ -42,6 +59,15 @@ router.post('/', (req, res) => {
 	);
 
 	res.send('success');
+});
+
+router.post('/participant', (req, res) => {
+	const { itemID } = req.query;
+	const { partipicantName, optionsSelected } = req.body;
+
+	console.log(itemID);
+	console.log(req.body);
+	res.send('a');
 });
 
 export default router;

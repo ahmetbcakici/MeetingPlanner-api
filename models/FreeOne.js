@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+const participantsSchema = new Schema({
+	participantName: String,
+	optionsSelected: Array,
+});
+
 const freeOneSchema = new Schema({
 	boardTitle: {
 		type: String,
@@ -14,5 +19,7 @@ const freeOneSchema = new Schema({
 	},
 	emailGenerater: String,
 	possibleDates: Array,
+	participants: [participantsSchema],
 });
+
 export default mongoose.model('FreeOne', freeOneSchema);
