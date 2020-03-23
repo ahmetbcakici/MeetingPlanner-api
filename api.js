@@ -11,16 +11,13 @@ mongoose.connect(process.env.DB_URI, err => {
 
 router.get('/freeone', async(req, res) => {
     const { itemID } = await req.query;
-    const docs = await FreeOne.find({});
-    docs.map(item => {
-        const clientItemID = JSON.stringify(item._id).substr(20, 5);
-        console.log(clientItemID)
-        if (clientItemID === itemID) {
-            console.log("bulundu")
-            res.send(item);
-            return;
-        }
-    });
+
+    try {
+        const item = await FreeOne.findById(itemID);
+        return res.status(200).send(item);
+    } catch (err) {
+        return res.status(500).send({ message: err.message });
+    }
 });
 
 router.post('/freeone', (req, res) => {
