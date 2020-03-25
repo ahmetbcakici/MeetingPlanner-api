@@ -2,24 +2,23 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const participantsSchema = new Schema({
-	participantName: String,
-	optionsSelected: Array,
+    participantName: String,
+    optionsSelected: [Number],
 });
 
 const freeOneSchema = new Schema({
-	boardTitle: {
-		type: String,
-		required: true,
-	},
-	description: String,
-	pollAnswers: Array,
-	nameGenerater: {
-		type: String,
-		required: true,
-	},
-	emailGenerater: String,
-	possibleDates: Array,
-	participants: [participantsSchema],
+    clientID: String,
+    boardTitle: String,
+    description: String,
+    pollAnswers: [String],
+    nameOwner: String,
+    emailOwner: String,
+    possibleDates: [String],
+    participants: [participantsSchema],
 });
+
+const clientIDGenerate = () => {
+
+}
 
 export default mongoose.model('FreeOne', freeOneSchema);

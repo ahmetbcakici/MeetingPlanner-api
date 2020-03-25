@@ -11,22 +11,22 @@ mongoose.connect(process.env.DB_URI, err => {
 
 router.get('/freeone', async(req, res) => {
     const { itemID } = await req.query;
-    const docs = await FreeOne.find({});
-    docs.map(item => {
-        const clientItemID = JSON.stringify(item._id).substr(20, 5);
-        console.log(clientItemID)
-        if (clientItemID === itemID) {
-            console.log("bulundu")
-            res.send(item);
-            return;
-        }
-    });
+    const doc = await FreeOne.findOne({ clientID: itemID });
+    res.send(doc);
 });
 
 router.post('/freeone', (req, res) => {
-    const { pollTitle, additionalDescriptions, userName, emailAddress, possibleDates } = req.body;
+    const {
+        pollTitle,
+        additionalDescriptions,
+        userName,
+        emailAddress,
+        possibleDates,
+    } = req.body;
+    const clientID = pollTitle[0] + Date.now();
 
     FreeOne.create({
+            clientID,
             boardTitle: pollTitle,
             description: additionalDescriptions,
             nameGenerater: userName,
@@ -44,17 +44,26 @@ router.post('/freeone', (req, res) => {
 
 router.post('/participant', async(req, res) => {
     const { itemID } = req.query;
-    const { partipicantName, optionsSelected } = req.body;
-    const docs = await FreeOne.find({});
-    docs.map(item => {
-        const clientItemID = JSON.stringify(item._id).substr(1, 5);
+    const { participantName, optionsSelected } = req.body;
+    const doc = await FreeOne.findOne({ clientID: itemID });
+    doc.participants.push({
+        participantName,
+        optionsSelected,
+    });
+    doc.save().then(() => res.send(doc));
+
+    /*const docs = await FreeOne.find({});
+    docs.map(doc => {
+        const clientItemID = JSON.stringify(doc._id).substr(20, 5);
         if (clientItemID === itemID) {
-            console.log("bulundu x")
-            res.send(item);
+            doc.participants.push({
+                participantName,
+                optionsSelected,
+            });
+            doc.save().then(() => res.send(doc));
             return;
         }
-    });
-
+    }); */
 });
 
 export default router;
