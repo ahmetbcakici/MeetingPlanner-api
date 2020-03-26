@@ -23,7 +23,8 @@ router.post('/freeone', (req, res) => {
         emailAddress,
         possibleDates,
     } = req.body;
-    const clientID = pollTitle[0] + Date.now();
+
+    const clientID = pollTitle[0] + Date.now(); // to make it here bad practice
 
     FreeOne.create({
             clientID,
@@ -50,20 +51,20 @@ router.post('/participant', async(req, res) => {
         participantName,
         optionsSelected,
     });
-    doc.save().then(() => res.send(doc));
+    doc.save();
+    res.send(doc);
+});
 
-    /*const docs = await FreeOne.find({});
-    docs.map(doc => {
-        const clientItemID = JSON.stringify(doc._id).substr(20, 5);
-        if (clientItemID === itemID) {
-            doc.participants.push({
-                participantName,
-                optionsSelected,
-            });
-            doc.save().then(() => res.send(doc));
-            return;
-        }
-    }); */
+router.post('/comment', async(req, res) => {
+    const { itemID } = req.query;
+    const { senderName, comment } = req.body;
+    const doc = await FreeOne.findOne({ clientID: itemID });
+    doc.comments.push({
+        senderName,
+        comment,
+    });
+    doc.save();
+    res.send(doc);
 });
 
 export default router;
