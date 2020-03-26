@@ -6,19 +6,23 @@ const participantsSchema = new Schema({
     optionsSelected: [Number],
 });
 
+const commentsSchema = new Schema({
+    senderName: String,
+    comment: String,
+});
+
 const freeOneSchema = new Schema({
     clientID: String,
     boardTitle: String,
     description: String,
     pollAnswers: [String],
-    nameOwner: String,
-    emailOwner: String,
+    ownerName: String,
+    ownerEmail: String,
     possibleDates: [String],
     participants: [participantsSchema],
+    comments: [commentsSchema],
 });
 
-const clientIDGenerate = () => {
-
-}
+const clientIDGenerate = () => {};
 
 export default mongoose.model('FreeOne', freeOneSchema);
