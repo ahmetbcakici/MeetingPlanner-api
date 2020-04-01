@@ -10,6 +10,7 @@ mongoose.connect(process.env.DB_URI, err => {
 });
 
 router.get('/freeone', async(req, res) => {
+    console.log(req.ips);
     const { itemID } = await req.query;
     const doc = await FreeOne.findOne({ clientID: itemID });
     res.send(doc);
@@ -19,28 +20,27 @@ router.post('/freeone', (req, res) => {
     const {
         pollTitle,
         additionalDescriptions,
-        userName,
-        emailAddress,
+        ownerName,
+        ownerEmail,
         possibleDates,
     } = req.body;
 
-    const clientID = pollTitle[0] + Date.now(); // to make it here bad practice
+    const clientID = pollTitle[0] + Date.now() + pollTitle[1]; // to make it here bad practice
 
     FreeOne.create({
             clientID,
             boardTitle: pollTitle,
             description: additionalDescriptions,
-            nameGenerater: userName,
-            emailGenerater: emailAddress,
+            ownerName,
+            ownerEmail,
             possibleDates: possibleDates,
         },
         err => {
             if (err) throw err;
-            console.log('kaydedildi');
         }
     );
 
-    res.send('success');
+    res.send(clientID);
 });
 
 router.post('/participant', async(req, res) => {
