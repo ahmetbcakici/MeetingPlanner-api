@@ -19,7 +19,7 @@ You can organize meetings with polls on the date that is suitable for everyone.
 git clone https://github.com/ahmetbcakici/MeetingPlanner-api.git # Clone repo
 cd MeetingPlanner-client # Enter project root folder
 npm install # Install modules required
-npm run dev # To run project , check http://localhost:3000 on your browser
+npm run start # To run server , check http://localhost:8080 on your browser
 ```
 
 ## Built With
